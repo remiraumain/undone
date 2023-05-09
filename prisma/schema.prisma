@@ -12,8 +12,16 @@ datasource db {
   relationMode = "prisma"
 }
 
-model Example {
+model Task {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  title       String
+  description String
+  done        Boolean @default(false)
+
+  userId String
+
+  @@index([userId])
 }
