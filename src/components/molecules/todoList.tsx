@@ -9,8 +9,8 @@ const TodoList = () => {
     <div className="rounded-xl border border-black p-4">
       <h3 className="mb-6">Tasks</h3>
       <ul>
-        {data?.map((todo) => (
-          <Task {...todo} />
+        {data?.map((task) => (
+          <Task key={task.id} {...task} />
         ))}
         <li key={data?.length}>
           <AddInput />
