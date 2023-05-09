@@ -102,3 +102,23 @@ export const createTRPCRouter = t.router;
  * are logged in.
  */
 export const publicProcedure = t.procedure;
+
+// check if the user is signed in, otherwise through a UNAUTHORIZED CODE
+const isAuthed = t.middleware(({ next, ctx }) => {
+  if (!ctx.auth.userId) {
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
+  return next({
+    ctx: {
+      auth: ctx.auth,
+    },
+  });
+});
+
+/**
+ * Protected procedure
+ *
+ * This is the base piece you use to build new queries and mutations on your tRPC API. It
+ * guarantees that a user querying is authorized.
+ */
+export const protectedProcedure = t.procedure.use(isAuthed);
