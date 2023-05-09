@@ -1,12 +1,10 @@
 import { SignInButton, UserButton, useUser } from "@clerk/nextjs";
 import { type NextPage } from "next";
 import Head from "next/head";
-
-import { api } from "~/utils/api";
+import TodoList from "~/components/molecules/todoList";
 
 const Dashboard: NextPage = () => {
   const { isSignedIn } = useUser();
-  const { data } = api.todo.getAll.useQuery();
 
   return (
     <>
@@ -25,17 +23,7 @@ const Dashboard: NextPage = () => {
       <main>
         <div>
           <div>
-            {data?.map((todo) => (
-              <div key={todo.id}>
-                <h2>{todo.title}</h2>
-                <p className="italic text-slate-500">{todo.description}</p>
-              </div>
-            ))}
-            <input
-              type="text"
-              placeholder="Add a task"
-              className="w-full bg-transparent"
-            />
+            <TodoList />
           </div>
         </div>
       </main>
