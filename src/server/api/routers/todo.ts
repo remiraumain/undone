@@ -6,7 +6,7 @@ export const todoRouter = createTRPCRouter({
   getAll: protectedProcedure.query(async ({ ctx }) => {
     const tasks = await ctx.prisma.task.findMany({
       take: 35,
-      where: { userId: ctx.auth.userId! },
+      where: { userId: ctx.auth.userId },
     });
     return tasks;
   }),
@@ -22,7 +22,7 @@ export const todoRouter = createTRPCRouter({
         data: {
           title: input.title,
           description: input.description,
-          userId: ctx.auth.userId!,
+          userId: ctx.auth.userId,
         },
       });
       return task;

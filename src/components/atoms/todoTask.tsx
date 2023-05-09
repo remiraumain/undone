@@ -7,8 +7,8 @@ const Task = (data: Task) => {
   const ctx = api.useContext();
 
   const errase = api.todo.delete.useMutation({
-    onSuccess: () => {
-      ctx.todo.getAll.invalidate();
+    onSuccess: async () => {
+      await ctx.todo.getAll.invalidate();
     },
     onError: (err) => {
       const errorMessage = err.data?.zodError?.fieldErrors.content;
@@ -21,8 +21,8 @@ const Task = (data: Task) => {
   });
 
   const update = api.todo.update.useMutation({
-    onSuccess: () => {
-      ctx.todo.getAll.invalidate();
+    onSuccess: async () => {
+      await ctx.todo.getAll.invalidate();
     },
     onError: (err) => {
       const errorMessage = err.data?.zodError?.fieldErrors.content;
@@ -53,7 +53,7 @@ const Task = (data: Task) => {
         />
         <h4
           className={`${
-            (update.isLoading || errase.isLoading) && "animate-pulse"
+            update.isLoading || errase.isLoading ? "animate-pulse" : ""
           }`}
         >
           {data.title}
@@ -65,7 +65,7 @@ const Task = (data: Task) => {
       </div>
       <p
         className={`px-6 ${
-          (update.isLoading || errase.isLoading) && "animate-pulse"
+          update.isLoading || errase.isLoading ? "animate-pulse" : ""
         }`}
       >
         {data.description}
