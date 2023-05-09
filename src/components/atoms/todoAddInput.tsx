@@ -7,9 +7,9 @@ const AddInput = () => {
   const ctx = api.useContext();
 
   const { mutate, isLoading } = api.todo.create.useMutation({
-    onSuccess: () => {
+    onSuccess: async () => {
       setInput("");
-      ctx.todo.getAll.invalidate();
+      await ctx.todo.getAll.invalidate();
     },
     onError: (err) => {
       const errorMessage = err.data?.zodError?.fieldErrors.content;
