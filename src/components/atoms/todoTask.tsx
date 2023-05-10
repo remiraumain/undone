@@ -2,12 +2,16 @@ import { Task } from "@prisma/client";
 import { IoClose } from "react-icons/io5";
 
 import { api } from "~/utils/api";
+import { TodoListContext } from "../molecules/context";
+import { useContext } from "react";
 
 const Task = (data: Task) => {
+  const { setIsLoading } = useContext(TodoListContext);
   const ctx = api.useContext();
 
   const errase = api.todo.delete.useMutation({
     onSuccess: async () => {
+      setIsLoading(false);
       await ctx.todo.getAll.invalidate();
     },
     onError: (err) => {
@@ -17,11 +21,15 @@ const Task = (data: Task) => {
       } else {
         console.log("Failed to post! Please try later.");
       }
+    },
+    onMutate: () => {
+      setIsLoading(true);
     },
   });
 
   const update = api.todo.update.useMutation({
     onSuccess: async () => {
+      setIsLoading(false);
       await ctx.todo.getAll.invalidate();
     },
     onError: (err) => {
@@ -31,6 +39,9 @@ const Task = (data: Task) => {
       } else {
         console.log("Failed to post! Please try later.");
       }
+    },
+    onMutate: () => {
+      setIsLoading(true);
     },
   });
 

@@ -1,14 +1,17 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { api } from "~/utils/api";
+import { TodoListContext } from "../molecules/context";
 
 const AddInput = () => {
   const [input, setInput] = useState("");
+  const { setIsLoading } = useContext(TodoListContext);
 
   const ctx = api.useContext();
 
   const { mutate, isLoading } = api.todo.create.useMutation({
     onSuccess: async () => {
       setInput("");
+      setIsLoading(false);
       await ctx.todo.getAll.invalidate();
     },
     onError: (err) => {
@@ -18,6 +21,9 @@ const AddInput = () => {
       } else {
         console.log("Failed to post! Please try later.");
       }
+    },
+    onMutate: () => {
+      setIsLoading(true);
     },
   });
   return (
